@@ -1,0 +1,103 @@
+x0                                 0.24107
+x1                                 1.8247e-07
+x2                                 0.0001908
+x3                                 7.0808e-08
+x4                                 0.006105
+x5                                 1.2008e-08
+x6                                 0.0015032
+x7                                 0.00030814
+x8                                 0.00056921
+x9                                 1.7924e-08
+x10                                0.74459
+x0^2                               4.1662e-05
+x0*x1                              2.1447e-08
+x0*x2                              4.026e-07
+x0*x3                              5.5114e-08
+x0*x4                              4.5297e-05
+x0*x5                              2.0457e-07
+x0*x6                              1.509e-05
+x0*x7                              3.6174e-06
+x0*x8                              5.394e-06
+x0*x9                              1.0008e-07
+x0*x10                             0.0053497
+x1^2                               9.3372e-08
+x1*x2                              1.8175e-09
+x1*x3                              2.673e-08
+x1*x4                              7.6815e-09
+x1*x5                              1.0233e-07
+x1*x6                              4.8922e-10
+x1*x7                              8.2439e-09
+x1*x8                              3.9721e-09
+x1*x9                              5.3658e-08
+x1*x10                             2.5978e-09
+x2^2                               1.4098e-06
+x2*x3                              2.2076e-08
+x2*x4                              1.0379e-09
+x2*x5                              6.2683e-08
+x2*x6                              1.1104e-06
+x2*x7                              1.2714e-07
+x2*x8                              3.555e-07
+x2*x9                              4.4955e-08
+x2*x10                             4.1939e-06
+x3^2                               3.0856e-09
+x3*x4                              5.7168e-08
+x3*x5                              1.9009e-08
+x3*x6                              2.1655e-08
+x3*x7                              2.5221e-08
+x3*x8                              3.1596e-08
+x3*x9                              2.0707e-08
+x3*x10                             4.7949e-07
+x4^2                               4.4642e-08
+x4*x5                              8.8493e-10
+x4*x6                              7.7391e-07
+x4*x7                              1.9475e-07
+x4*x8                              3.2937e-07
+x4*x9                              9.5748e-09
+x4*x10                             0.00013862
+x5^2                               2.9007e-09
+x5*x6                              7.1117e-08
+x5*x7                              2.9696e-10
+x5*x8                              3.9998e-08
+x5*x9                              6.173e-10
+x5*x10                             2.7848e-09
+x6^2                               2.4389e-07
+x6*x7                              3.8884e-10
+x6*x8                              2.0399e-06
+x6*x9                              8.774e-08
+x6*x10                             3.4132e-05
+x7^2                               1.0795e-07
+x7*x8                              8.7047e-09
+x7*x9                              3.9816e-11
+x7*x10                             6.8873e-06
+x8^2                               5.4653e-07
+x8*x9                              5.3515e-08
+x8*x10                             1.2331e-05
+x9^2                               8.3432e-09
+x9*x10                             8.0065e-08
+x10^2                              4.8176e-07
+
+
+Total Sobols
+   Total Sobol delta_CD0 = 0.24653
+   Total Sobol delta_ks = 5.0481e-07
+   Total Sobol delta_e = 0.00019853
+   Total Sobol delta_eta = 8.3266e-07
+   Total Sobol delta_kv = 0.0062903
+   Total Sobol delta_alpha = 5.192e-07
+   Total Sobol delta_kw = 0.0015568
+   Total Sobol delta_fsys = 0.00031912
+   Total Sobol delta_p = 0.00059035
+   Total Sobol delta_beta = 4.7722e-07
+   Total Sobol delta_Cf = 0.75014
+Rescaled Total Sobols
+   Total Sobol delta_CD0 = 0.24515
+   Total Sobol delta_ks = 5.0199e-07
+   Total Sobol delta_e = 0.00019742
+   Total Sobol delta_eta = 8.2801e-07
+   Total Sobol delta_kv = 0.0062552
+   Total Sobol delta_alpha = 5.163e-07
+   Total Sobol delta_kw = 0.0015481
+   Total Sobol delta_fsys = 0.00031734
+   Total Sobol delta_p = 0.00058705
+   Total Sobol delta_beta = 4.7455e-07
+   Total Sobol delta_Cf = 0.74594

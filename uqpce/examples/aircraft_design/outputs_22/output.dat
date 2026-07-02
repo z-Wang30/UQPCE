@@ -1,0 +1,12 @@
+###  UQPCE v1.0.0 Output
+###  Analysis of case: None
+###  Analysis started: 2026-06-29 16:28:05.191507
+###  Analysis finished: 2026-06-29 16:28:05.996681
+###  Total compute time: 0:00:00.805174
+--------------------------------------------------------------------------------
+
+Mean of response nan
+Variance of response nan
+Mean error of surrogate nan
+Signal to noise ratio nan
+95.0% Confidence Interval on Response [nan , nan]

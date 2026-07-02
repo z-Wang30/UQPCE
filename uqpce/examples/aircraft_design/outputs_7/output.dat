@@ -1,0 +1,97 @@
+###  UQPCE v1.0.0 Output
+###  Analysis of case: None
+###  Analysis started: 2026-06-29 11:14:56.773287
+###  Analysis finished: 2026-06-29 11:15:07.874171
+###  Total compute time: 0:00:11.100884
+--------------------------------------------------------------------------------
+
+Mean of response 0.044783
+Variance of response 2.7485e-07
+Mean error of surrogate 3.5444e-07
+Signal to noise ratio 0.77543
+95.0% Confidence Interval on Response [0.043768 , 0.045802]
+Shapiro-Wilks test statistic is 0.98012, P-value is 0.023778
+
+Evidence exists that errors are not from a normal distribution
+
+--------------------------------------------------------------------------------
+
+The settings used to generate these results are:
+--------------------------------------------------------------------------------
+
+
+The input file used is:
+Variable 0:
+  name: delta_CD0
+  distribution: normal
+  mean: 1.0
+  stdev: 0.010
+  type: aleatory
+Variable 1:
+  name: delta_ks
+  distribution: normal
+  mean: 1.0
+  stdev: 0.15
+  type: aleatory
+Variable 2:
+  name: delta_e
+  distribution: normal
+  mean: 1.0
+  stdev: 0.05
+  type: aleatory
+Variable 3:
+  name: delta_eta
+  distribution: normal
+  mean: 1.0
+  stdev: 0.10
+  type: aleatory
+Variable 4:
+  name: delta_kv
+  distribution: normal
+  mean: 1.0
+  stdev: 0.20
+  type: aleatory
+Variable 5:
+  name: delta_alpha
+  distribution: normal
+  mean: 1.0
+  stdev: 0.10
+  type: aleatory
+Variable 6:
+  name: delta_kw
+  distribution: normal
+  mean: 1.0
+  stdev: 0.08
+  type: aleatory
+Variable 7:
+  name: delta_fsys
+  distribution: normal
+  mean: 1.0
+  stdev: 0.10
+  type: aleatory
+Variable 8:
+  name: delta_p
+  distribution: normal
+  mean: 1.0
+  stdev: 0.20
+  type: aleatory
+Variable 9:
+  name: delta_beta
+  distribution: normal
+  mean: 1.0
+  stdev: 0.15
+  type: aleatory
+Variable 10:
+  name: delta_Cf
+  distribution: normal
+  mean: 1.0
+  stdev: 0.015
+  type: aleatory
+Settings:
+    order: 2
+    backend: Agg
+    conv_threshold_percent: 0.000005
+    aleat_samp_size: 25000
+    track_convergence_off: True
+    significance: 0.05
+    plot: True
