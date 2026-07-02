@@ -10,6 +10,7 @@ from WeightsComp import Weights_Struct
 from propAndCost import Propulsion
 from propAndCost import EngineWeight
 from propAndCost import DOC
+from propAndCost import Dpm
 from BreguetRangeComp import BreguetRangeComp
 from total_mass_comp import TotalMassComp
 
@@ -47,24 +48,25 @@ class AeroStruct(om.Group):
         self.nonlinear_solver = om.NewtonSolver(solve_subsystems=True)
         self.nonlinear_solver.options['iprint'] = 2
         self.nonlinear_solver.options['maxiter'] = 20
-        # self.nonlinear_solver.options['atol'] = 1e-6
-        # self.nonlinear_solver.options['rtol'] = 1e-9
+        self.nonlinear_solver.options['atol'] = 1e-8
+        self.nonlinear_solver.options['rtol'] = 1e-8
         self.linear_solver = om.DirectSolver()
 
 from fixed import parameters    # Import fixed parameters file
 if __name__ == '__main__':
     
     #Input files
-    input_file = 'input.yaml'
-    matrix_file = 'run_matrix_generated.dat'
+    # input_file = 'input.yaml'
+    # matrix_file = 'run_matrix_generated.dat'
 
     #Setting up for UQPCE
-    (
-        var_basis, norm_sq, resampled_var_basis,
-        aleatory_cnt, epistemic_cnt, resp_cnt, order, variables,
-        sig, run_matrix
-    ) = interface.initialize(input_file, matrix_file)
-    
+    # (
+    #     var_basis, norm_sq, resampled_var_basis,
+    #     aleatory_cnt, epistemic_cnt, resp_cnt, order, variables,
+    #     sig, run_matrix
+    # ) = interface.initialize(input_file, matrix_file)
+    resp_cnt = 1
+
     #Problem definition
     p = om.Problem()
 
@@ -80,21 +82,25 @@ if __name__ == '__main__':
     p.model.add_subsystem('aerostruct', AeroStruct(vec_size=resp_cnt), promotes=['*'])
 
     p.model.add_subsystem('DOC', DOC(vec_size=resp_cnt),
-                        promotes_inputs=['SFC_tech', 'V_cruise', ('R', 'R_comp'), 'm_fuel', 'Cf_base', 'C_time', 'k_acq', 'C_eng_ref', 'beta_base', 'N_pax', 'delta_Cf', 'delta_beta'],
-                        promotes_outputs=['DOC', 'Dpm'])
+                        promotes_inputs=['SFC_tech', 'V_cruise', ('R', 'R_comp'), 'm_fuel', 'Cf_base', 'C_time', 'k_acq', 'C_eng_ref', 'beta_base', 'delta_Cf', 'delta_beta'],
+                        promotes_outputs=['DOC'])
+    
+    p.model.add_subsystem('DOC_pax_km', Dpm(vec_size=resp_cnt),
+                        promotes_inputs=['DOC', 'N_pax', ('R', 'R_comp')],
+                        promotes_outputs=['Dpm'])
     
     #Adding UQPCE group
-    p.model.add_subsystem(
-        'UQPCE',
-        UQPCEGroup(
-            significance=sig, var_basis=var_basis, norm_sq=norm_sq, 
-            resampled_var_basis=resampled_var_basis, tail='both',
-            epistemic_cnt=epistemic_cnt, aleatory_cnt=aleatory_cnt,
-            uncert_list=['Dpm'], tanh_omega=1e-3
-        ),
-        promotes_inputs=['Dpm'], 
-        promotes_outputs=['Dpm:ci_lower', 'Dpm:ci_upper', 'Dpm:mean', 'Dpm:mean_plus_var']
-    )    
+    # p.model.add_subsystem(
+    #     'UQPCE',
+    #     UQPCEGroup(
+    #         significance=sig, var_basis=var_basis, norm_sq=norm_sq, 
+    #         resampled_var_basis=resampled_var_basis, tail='both',
+    #         epistemic_cnt=epistemic_cnt, aleatory_cnt=aleatory_cnt,
+    #         uncert_list=['Dpm'], tanh_omega=1e-3
+    #     ),
+    #     promotes_inputs=['Dpm'], 
+    #     promotes_outputs=['Dpm:ci_lower', 'Dpm:ci_upper', 'Dpm:mean', 'Dpm:mean_plus_var']
+    # )    
 
     #Setting model input defaults
     p.model.set_input_defaults('AR', val=9.35)
@@ -105,23 +111,25 @@ if __name__ == '__main__':
     #Setup optimizer
     p.driver = om.ScipyOptimizeDriver()
     p.driver.options['optimizer'] = 'SLSQP'
-    # p.driver.options['tol'] = 1e-8
+    p.driver.options['tol'] = 1e-6
+    # p.driver.options['debug_print'] = ['desvars','ln_cons','nl_cons','objs']
 
     #Set design variables, constraints, and objectives
-    p.model.add_design_var('S', units='m**2', lower=0.)
-    p.model.add_design_var('V_cruise', units='m/s', lower=0.)
-    p.model.add_design_var('AR', lower=0.)
-    p.model.add_design_var('SFC_tech', lower=-1.0, upper=1.0)
+    p.model.add_design_var('S', units='m**2', lower=100., upper=180., ref=1e2)
+    p.model.add_design_var('V_cruise', units='m/s', lower=200., upper=260., ref=1e2)
+    p.model.add_design_var('AR', lower=7., upper=50., ref=1)
+    p.model.add_design_var('SFC_tech', lower=-1.0, upper=1.0, ref=1)
 
-    p.model.add_constraint('CL', lower=0.0, upper=1.0) #CHANGE UPPER BOUND TO CL_MAX (STALL)
+    p.model.add_constraint('CL', lower=0.4, upper=0.53, ref=1e-1) #CHANGE UPPER BOUND TO CL_MAX (STALL)
 
-    p.model.add_objective('Dpm:mean')
+    # p.model.add_objective('Dpm')
+    p.model.add_objective('DOC', ref=1e4)
 
     p.model.approx_totals()
 
     #PROBLEM SETUP
     p.setup(force_alloc_complex=True)
-    interface.set_vals(p, variables, run_matrix)
+    # interface.set_vals(p, variables, run_matrix)
 
     #Set values of parameters, design variables, state variables, and constants
     p.set_val('R_target', np.full(resp_cnt, parameters['R_target']), units='m')
@@ -145,7 +153,7 @@ if __name__ == '__main__':
     p.set_val('m_payload', parameters['m_payload_design'], units='kg')
     p.set_val('m_eng_ref', parameters['m_eng_ref'], units='kg')
 
-    p.set_val('m_fuel', np.full(resp_cnt, 18000.), units='kg') #Initial guess for fuel mass
+    p.set_val('m_fuel', np.full(resp_cnt, 9000.), units='kg') #Initial guess for fuel mass
 
     p.set_val('Cf_base', parameters['Cf_base'], units='USD/kg')
     p.set_val('C_time', parameters['C_time'], units='USD/h') # 2000 USD/hr
@@ -162,16 +170,18 @@ if __name__ == '__main__':
 
     #PROBLEM SOLVE
     # p.set_solver_print(level=0)
-    # p.run_driver()
-    p.run_model()
-    interface.analysis(p, 'Dpm', 'input.yaml', 'run_matrix_generated.dat')
+    p.run_driver()
+    # p.run_model()
+    p.check_totals(of=['DOC'], wrt=['AR', 'S', 'V_cruise', 'SFC_tech'], method='cs', compact_print=True)
+    # p.model.list_outputs(units=True)
+    # interface.analysis(p, 'Dpm', 'input.yaml', 'run_matrix_generated.dat')
     # om.n2(p)
 
     # partial_data = p.check_partials(out_stream=None, method='cs')
     # assert_check_partials(partial_data, atol=1e-12, rtol=1e-12)
 
-    print(p.get_val('Dpm:mean'))
-    # print(p.get_val('DOC'))
+    print(p.get_val('Dpm'))
+    print(p.get_val('DOC'))
     print(p.get_val('AR'))
     print(p.get_val('V_cruise'))
     print(p.get_val('S'))

@@ -37,7 +37,7 @@ parameters = {
     "AR" : 9.45,                # Aspect ratio
     "S" : 124.58,               # [m^2], wing area; same as 737-800 area
     "V" : 231.,                # [m/s], cruise speed
-    "SFC_tech" : 0,             # SFC technology factor (-1 to 1)
+    "SFC_tech" : 0.5,             # SFC technology factor (-1 to 1)
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
     #$$$$$COST STUFF$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
